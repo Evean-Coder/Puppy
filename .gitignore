@@ -1,0 +1,24 @@
+# 依赖与构建产物
+node_modules/
+dist/
+build/
+
+# Python 缓存
+__pycache__/
+*.pyc
+
+# 视频管线的中间产物（可重新生成：edge-tts → wav → master）
+tools/video/work/wav/
+tools/video/work/tts/
+tools/video/work/master.wav
+tools/video/work/*.raw
+*.log
+
+# 系统与编辑器
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# 本地导出的临时数据
+伴学记录_*.md

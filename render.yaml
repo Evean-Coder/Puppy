@@ -1,0 +1,30 @@
+# Render Blueprint：纯静态站，不需要构建、不需要服务端
+# 仓库连上 Render 后会自动读到这份配置；也可以在 Dashboard 手填（见 部署说明.md）
+services:
+  - type: web
+    name: shiba-course-assistant
+    runtime: static
+    # 没有构建步骤：site/ 里的东西就是最终产物
+    buildCommand: ""
+    staticPublishPath: ./site
+    routes:
+      # 单页站点：未知路径都回首页，避免分享带路径的链接时 404
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      # 每次刷新都拿最新课程内容，避免 CDN 缓存住旧版页面
+      - path: /
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
+      - path: /index.html
+        name: Cache-Control
+        value: public, max-age=0, must-revalidate
+      # 视频与幻灯片体积大、内容不变，长缓存
+      - path: /media/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      # 跨域隔离不必开；但允许同源加载媒体
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
